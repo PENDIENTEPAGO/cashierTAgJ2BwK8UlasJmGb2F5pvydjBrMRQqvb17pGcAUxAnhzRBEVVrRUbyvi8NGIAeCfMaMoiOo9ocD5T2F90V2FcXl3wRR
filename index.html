@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitud de Pago - Bre-B</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #333; }
+    .container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 20px; }
+    
+    /* Tarjeta del Monto */
+    .card-monto { background: #fff; padding: 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .label-monto { font-size: 14px; color: #666; font-weight: 500; }
+    .valor-monto { font-size: 36px; font-weight: 800; color: #1a102f; margin: 8px 0 16px 0; }
+    .badge-cliente { background: #f8f9fa; padding: 10px 14px; border-radius: 8px; font-size: 14px; color: #444; font-weight: 600; border: 1px solid #eee; }
+
+    /* Tarjeta del Método de Pago */
+    .card-metodo { background: #fff; padding: 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 2px solid #1a102f; }
+    .titulo-metodo { font-size: 18px; font-weight: 700; color: #1a102f; margin-bottom: 16px; }
+    
+    .box-llave { background: #fff; border: 1px dashed #d1c4e9; padding: 14px; border-radius: 10px; margin: 12px 0; text-align: center; }
+    .label-llave { font-size: 11px; color: #666; font-weight: 700; letter-spacing: 0.5px; }
+    .valor-llave { font-size: 18px; font-weight: 700; color: #1a102f; margin-top: 4px; word-break: break-all; }
+
+    .btn-breb { background: #1a102f; color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; width: 100%; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-breb:hover { background: #2c1a4d; }
+
+    /* Instrucciones */
+    .steps-box { background: #faf8fc; border: 1px solid #eee; padding: 16px; border-radius: 12px; margin-top: 16px; }
+    .steps-title { font-size: 15px; font-weight: 700; color: #1a102f; margin-bottom: 12px; }
+    .step-item { display: flex; gap: 10px; font-size: 13px; color: #555; margin-bottom: 10px; align-items: flex-start; line-height: 1.4; }
+    .step-num { background: #e8e2f3; color: #1a102f; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; }
+
+    .warning-box { background: #fff8e1; border-left: 4px solid #ffb300; padding: 10px 12px; border-radius: 6px; font-size: 12px; color: #856404; margin-top: 12px; line-height: 1.4; }
+
+    /* Panel Generador (Para ti) */
+    .card-generator { background: #eef2f7; border: 1px dashed #b0bec5; padding: 20px; border-radius: 16px; margin-top: 10px; }
+    .card-generator h3 { margin-top: 0; color: #2c3e50; font-size: 16px; }
+    .card-generator label { font-size: 13px; font-weight: bold; color: #555; display: block; margin-top: 10px; }
+    .card-generator input { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+    .btn-gen { background: #2980b9; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; width: 100%; font-size: 15px; font-weight: bold; margin-top: 14px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- TARJETA DEL MONTO Y CLIENTE -->
+    <div class="card-monto">
+      <div class="label-monto">Monto a pagar</div>
+      <div class="valor-monto" id="monto-cliente">$0</div>
+      <div class="badge-cliente">Cliente / Titular: <span id="nombre-cliente">NOMBRE CLIENTE</span></div>
+    </div>
+
+    <!-- TARJETA DEL MÉTODO DE PAGO Y PASOS -->
+    <div class="card-metodo">
+      <div class="titulo-metodo">Método de Pago</div>
+      
+      <div style="font-size: 14px; font-weight: 700; color: #1a102f;">Llave Bre-B</div>
+      <div style="font-size: 12px; color: #666; margin-bottom: 8px;">Billetera Digital</div>
+
+      <div class="box-llave">
+        <div class="label-llave">LLAVE PARA TRANSFERIR</div>
+        <div class="valor-llave" id="llave-cliente">@PRUEBA000000000005</div>
+      </div>
+
+      <button class="btn-breb" onclick="copiarLlave()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+        COPIAR LLAVE BRE-B
+      </button>
+
+      <div class="steps-box">
+        <div class="steps-title">¿Cómo realizar el pago?</div>
+        <div class="step-item"><div class="step-num">1</div><div>Copia la llave Keys del comercio usando el botón <strong>"COPIAR LLAVE BRE-B"</strong>.</div></div>
+        <div class="step-item"><div class="step-num">2</div><div>Abre tu app bancaria y selecciona <strong>"Transferir con BRE-B"</strong>.</div></div>
+        <div class="step-item"><div class="step-num">3</div><div>Pega la llave Keys y confirma la transferencia.</div></div>
+        <div class="step-item"><div class="step-num">4</div><div>Asegúrate de transferir exactamente el monto establecido en este link de pago.</div></div>
+        
+        <div class="warning-box">
+          *Si transfieres un monto diferente al establecido en este link de pago, la transacción será rechazada automáticamente.
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL GENERADOR (SOLO APARECE EN EL ENLACE BASE) -->
+    <div class="card-generator" id="panel-generador">
+      <h3>Generar nuevo enlace de cobro</h3>
+      <label>Nombre del cliente:</label>
+      <input type="text" id="gen-nombre" placeholder="Ej: JUAN PEREZ">
+      
+      <label>Monto:</label>
+      <input type="number" id="gen-monto" placeholder="Ej: 200000">
+      
+      <label>Llave Bre-B:</label>
+      <input type="text" id="gen-llave" placeholder="Ej: @PRUEBA000000000005">
+      
+      <button class="btn-gen" onclick="generarLink()">Generar y Copiar Enlace</button>
+      <input type="text" id="resultado-link" readonly style="margin-top: 10px; background: #fff; font-size: 12px;">
+    </div>
+
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const nombre = urlParams.get('nombre');
+    const monto = urlParams.get('monto');
+    const llave = urlParams.get('llave');
+
+    // Si la URL tiene datos, llenamos los campos y ocultamos el panel generador
+    if (nombre || monto || llave) {
+      document.getElementById('panel-generador').style.display = 'none';
+      document.getElementById('nombre-cliente').innerText = nombre ? decodeURIComponent(nombre) : 'CLIENTE';
+      document.getElementById('monto-cliente').innerText = monto ? '$' + Number(monto).toLocaleString('es-CO') : '$0';
+      document.getElementById('llave-cliente').innerText = llave ? decodeURIComponent(llave) : '@PRUEBA000000000005';
+    }
+
+    function copiarLlave() {
+      const textoLlave = document.getElementById('llave-cliente').innerText;
+      if (textoLlave) {
+        navigator.clipboard.writeText(textoLlave);
+        alert('¡Llave copiada al portapapeles!');
+      } else {
+        alert('No hay llave especificada');
+      }
+    }
+
+    function generarLink() {
+      const inputNombre = document.getElementById('gen-nombre').value.trim();
+      const inputMonto = document.getElementById('gen-monto').value.trim();
+      const inputLlave = document.getElementById('gen-llave').value.trim();
+      
+      if (!inputNombre || !inputMonto || !inputLlave) {
+        alert('Por favor completa todos los campos para generar el enlace.');
+        return;
+      }
+
+      const baseUrl = window.location.origin + window.location.pathname;
+      const finalUrl = `${baseUrl}?nombre=${encodeURIComponent(inputNombre)}&monto=${encodeURIComponent(inputMonto)}&llave=${encodeURIComponent(inputLlave)}`;
+      
+      const resInput = document.getElementById('resultado-link');
+      resInput.value = finalUrl;
+      
+      navigator.clipboard.writeText(finalUrl);
+      alert('¡Enlace generado y copiado al portapapeles!');
+    }
+  </script>
+
+</body>
+</html>
